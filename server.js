@@ -37,12 +37,22 @@ var server = http.createServer(function(req, res) {
     if(parsedUrl.pathname === '/__webpack_hmr') return hot(req, res);
   } else {
     if(parsedUrl.pathname === '/dist/bundle.js') {
-      fs.createReadStream(path.join(__dirname, '/dist/bundle.js')).pipe(res);
+      fs.createReadStream(path.join(__dirname, '/dist/bundle.js'))
+      .on('error', function(err) {
+        res.writeHead(404)
+        res.end()
+      })
+      .pipe(res);
       return
     }
 
     if(parsedUrl.pathname === '/dist/style.css') {
-      fs.createReadStream(path.join(__dirname, '/dist/style.css')).pipe(res);
+      fs.createReadStream(path.join(__dirname, '/dist/style.css'))
+      .on('error', function(err) {
+        res.writeHead(404)
+        res.end()
+      })
+      .pipe(res);
       return
     }
   }
